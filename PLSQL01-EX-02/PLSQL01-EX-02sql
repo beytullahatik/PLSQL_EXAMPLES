@@ -1,0 +1,10 @@
+DECLARE
+    vs_first_name_1 VARCHAR2(50):= INITCAP(LOWER('ERMAN'));
+    vs_last_name_1 VARCHAR2(50):= INITCAP(LOWER('›briﬁiM'));
+    vs_first_name_2 VARCHAR2(50):=(LOWER('MUstAFA'));
+    vs_last_name_2 VARCHAR2(50):=(LOWER('Demir'));
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Name - Surname = '|| vs_first_name_1||' '||vs_last_name_1 );
+    DBMS_OUTPUT.PUT_LINE('Name - Surname = '|| vs_first_name_2||' '||vs_last_name_2 );
+END;
+/
