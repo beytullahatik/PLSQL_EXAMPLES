@@ -1,0 +1,20 @@
+DECLARE
+    CURSOR PLSQL IS 
+    SELECT FIRST_NAME, LAST_NAME
+    FROM HR.EMPLOYEES;
+    v_first_name HR.EMPLOYEES.FIRST_NAME % TYPE;
+    v_last_name HR.EMPLOYEES.LAST_NAME % TYPE;
+BEGIN
+    OPEN PLSQL;
+    LOOP
+    FETCH PLSQL 
+    INTO v_first_name, v_last_name;
+    IF PLSQL%NOTFOUND
+    THEN
+    EXIT;
+    END IF;
+    Dbms_output.put_line('First Name - Last Name = '||v_first_name||' '||v_last_name);
+    END LOOP;
+    CLOSE PLSQL;
+END;
+/
