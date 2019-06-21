@@ -1,0 +1,9 @@
+DECLARE
+    vn_number NUMBER;
+BEGIN
+  FOR vn_number IN 1 .. 20 LOOP
+    IF (MOD(vn_number,2)=0) THEN
+    dbms_output.put_line('Number is :' || vn_number);
+    END IF;
+  END LOOP;
+END;
