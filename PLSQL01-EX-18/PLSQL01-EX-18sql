@@ -1,0 +1,29 @@
+CREATE OR REPLACE PACKAGE find_first_name
+IS
+   PROCEDURE show_first_name(pin_employee_id IN HR.EMPLOYEES.employee_id%TYPE);
+   END find_first_name;
+   
+CREATE OR REPLACE PACKAGE BODY find_first_name
+IS
+
+    PROCEDURE show_first_name(pin_employee_id IN HR.EMPLOYEES.employee_id%TYPE)
+    IS
+        vs_first_name HR.EMPLOYEES.first_name%TYPE;   
+    BEGIN
+
+         SELECT FIRST_NAME INTO vs_first_name 
+             FROM HR.EMPLOYEES 
+             WHERE employee_id=pin_employee_id;
+        DBMS_OUTPUT.PUT_line(vs_first_name);
+    
+END;
+BEGIN 
+    DBMS_OUTPUT.PUT_line(find_first_name);
+END find_first_name;
+
+DECLARE
+BEGIN
+
+    find_first_name.show_first_name(100);
+    
+END;
