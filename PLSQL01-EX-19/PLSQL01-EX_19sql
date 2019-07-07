@@ -1,0 +1,30 @@
+CREATE OR REPLACE PACKAGE find_all_name
+IS
+   PROCEDURE show_all_name;
+   END find_all_name;
+   
+CREATE OR REPLACE PACKAGE BODY find_all_name
+IS
+
+    PROCEDURE show_all_name
+    IS   
+    BEGIN
+
+        FOR employees_all_firstName
+        IN
+            ( SELECT first_name 
+                     FROM HR.EMPLOYEES )
+        LOOP
+            DBMS_OUTPUT.PUT_LINE(employees_all_firstName.first_name);
+        END LOOP ;
+    
+END;
+BEGIN 
+    DBMS_OUTPUT.PUT_line(find_all_name);
+END find_all_name;
+
+BEGIN
+
+    find_all_name.show_all_name;
+    
+END;
