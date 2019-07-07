@@ -1,1 +1,82 @@
+SELECT * FROM HR.EMPLOYEES;
 
+SELECT * FROM HR.DEPARTMENTS;
+
+-----EX 1--------
+
+ALTER TABLE HR.EMPLOYEES
+         ADD MAX_SALARY NUMBER;
+    
+UPDATE HR.EMPLOYEES
+    SET MAX_SALARY = (SELECT MAX(SALARY) FROM HR.EMPLOYEES);
+
+DELETE FROM HR.EMPLOYEES 
+    WHERE SALARY = (SELECT MIN(SALARY) FROM HR.EMPLOYEES);
+    
+------EX 2---------
+
+CREATE INDEX DPR_NAME_IDX
+        ON HR.DEPARTMENTS(DEPARTMENT_NAME);
+
+ALTER TABLE HR.EMPLOYEES
+        ADD CONSTRAINT salary_boundaries CHECK (SALARY >= 1000 AND SALARY <= 100000);
+
+DROP INDEX DPR_NAME_IDX;
+
+ALTER TABLE HR.EMPLOYEES 
+        DROP CONSTRAINT salary_boundaries;
+        
+        
+-------EX 3 ---------
+
+CREATE TABLE EMP
+          AS (SELECT * FROM HR.EMPLOYEES);
+  
+ALTER TABLE EMP
+         ADD DEPARTMENT_NAME VARCHAR(30);
+
+
+MERGE INTO EMP e
+        USING (SELECT DEPARTMENT_ID, DEPARTMENT_NAME 
+                    FROM HR.DEPARTMENTS) d
+        ON (e.DEPARTMENT_ID = d.DEPARTMENT_ID)
+        WHEN MATCHED THEN
+        UPDATE SET e.DEPARTMENT_NAME = d.DEPARTMENT_NAME;
+        
+        
+-------EX 4 ------------
+
+WITH
+EMP_DEP AS (
+    SELECT FIRST_NAME, LAST_NAME, JOB_ID, DEPARTMENT_ID
+         FROM HR.EMPLOYEES
+         WHERE JOB_ID LIKE 'S%'),
+JOB_TITLES AS (
+    SELECT JOB_ID, JOB_TITLE, MIN_SALARY, MAX_SALARY
+         FROM HR.JOBS),
+DEPARTMENT_NAME AS(
+    SELECT DEPARTMENT_ID, DEPARTMENT_NAME
+         FROM HR.DEPARTMENTS)
+SELECT EMP_DEP.FIRST_NAME,
+       EMP_DEP.LAST_NAME,
+       EMP_DEP.JOB_ID,
+       JOB_TITLES.JOB_TITLE,
+       JOB_TITLES.MIN_SALARY,
+       JOB_TITLES.MAX_SALARY,
+       EMP_DEP.DEPARTMENT_ID,
+       DEPARTMENT_NAME.DEPARTMENT_NAME
+FROM EMP_DEP, DEPARTMENT_NAME, JOB_TITLES
+WHERE EMP_DEP.DEPARTMENT_ID = DEPARTMENT_NAME.DEPARTMENT_ID 
+AND    EMP_DEP.JOB_ID = JOB_TITLES.JOB_ID
+
+
+
+-------EX 5-------------
+
+
+--ROLBACK   :  Yaptýgýmýz iþlemlerin hatalý oldugunu gördüðümüzde, bu kodlarý önceki tutarlý haline geri almaya yarar.
+--COMMÝT    :  Yaptýðýmýz iþlemlerin doðru oldugunu gördüðümüzde, bu iþlemleri kalýcý olmasýný saðlar.Yapýlan tüm
+--deðiþiklikleri tüm sessionlar tarafýndan görünür hale getirir.
+
+
+        
